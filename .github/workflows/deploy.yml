@@ -62,11 +62,13 @@ jobs:
             exit 1
           else
             exit 0
-          fi      - name: Publish Terraform Plan
+          fi
+
+      - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: aws/tfplan
+          path: terraform/tfplan
 
   build-site:
     name: Build Astro Site
