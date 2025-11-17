@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "website" {
   comment             = "${var.name} static website"
   default_root_object = "index.html"
 
-  aliases = [var.domain, var.fqdn]
+  aliases = [var.fqdn]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
