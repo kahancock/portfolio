@@ -134,7 +134,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-          path: aws/
+          path: terraform/
 
       - name: Terraform Apply
         working-directory: ./terraform
