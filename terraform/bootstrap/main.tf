@@ -31,7 +31,7 @@ variable "project_name" {
 resource "aws_s3_bucket" "terraform_state" {
   bucket        = "${var.project_name}-terraform-state-${random_string.bucket_suffix.result}"
   force_destroy = false
-  
+
   tags = {
     Name        = "Terraform State Bucket"
     Project     = var.project_name
@@ -77,10 +77,10 @@ resource "aws_s3_bucket_public_access_block" "terraform_state" {
 
 # DynamoDB table for state locking
 resource "aws_dynamodb_table" "terraform_locks" {
-  name           = "${var.project_name}-terraform-locks"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "LockID"
-  
+  name         = "${var.project_name}-terraform-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
   attribute {
     name = "LockID"
     type = "S"
@@ -105,9 +105,9 @@ output "terraform_lock_table" {
 }
 
 output "setup_instructions" {
-  value = <<-EOT
+  value       = <<-EOT
     Terraform backend setup complete!
-    
+
     Add these secrets to your GitHub repository:
     - TF_STATE_BUCKET: ${aws_s3_bucket.terraform_state.id}
     - TF_STATE_LOCK_TABLE: ${aws_dynamodb_table.terraform_locks.name}

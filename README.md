@@ -105,20 +105,6 @@ The site uses AWS infrastructure with Terraform and GitHub Actions for automated
 4. **S3 Sync** uploads files with optimized cache headers
 5. **CloudFront Invalidation** ensures fresh content delivery
 
-### Setup Requirements
-1. **AWS Account** with programmatic access
-2. **Route53 Hosted Zone** for your domain
-3. **GitHub Secrets** configured (see `GITHUB_SECRETS.md`)
-4. **Terraform State Backend** (run `aws/bootstrap/` first)
-
-### Cost Optimization
-- S3 static hosting (~$1-5/month)
-- CloudFront CDN (~$0.50-2/month)
-- Route53 hosted zone (~$0.50/month)
-- ACM certificates (free)
-
-**Total estimated cost: ~$2-8/month**
-
 
 ## 📝 License
 

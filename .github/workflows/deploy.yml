@@ -58,18 +58,18 @@ jobs:
             || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-          
+
           # Get S3 bucket name and CloudFront distribution ID for deployment
           S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
           CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
-          
+
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
           echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
-          
+
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
-          else 
+          else
             exit 0
           fi
 
@@ -155,7 +155,7 @@ jobs:
         run: |
           S3_BUCKET=$(terraform output -raw s3_bucket_name)
           CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id)
-          
+
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
           echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
 
@@ -189,7 +189,7 @@ jobs:
             S3_BUCKET="${{ needs.terraform-plan.outputs.s3BucketName }}"
             CLOUDFRONT_ID="${{ needs.terraform-plan.outputs.cloudfrontId }}"
           fi
-          
+
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
           echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
 
@@ -201,7 +201,7 @@ jobs:
             --exclude "*.html" \
             --exclude "*.xml" \
             --exclude "*.txt"
-          
+
           # Upload HTML files with shorter cache
           aws s3 sync dist/ s3://${{ steps.infra.outputs.s3_bucket }}/ \
             --delete \

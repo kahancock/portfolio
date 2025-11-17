@@ -91,7 +91,7 @@ export const workExperience = [
       "- Held multiple roles in IT, including Systems Administrator, Network Administrator, and IT Manager during my early career."
     ],
   },
- 
+
 ];
 
 export const education = [
@@ -128,11 +128,11 @@ export const skills = {
     "YAML",
   ],
   development: [
-    "Django", 
-    "FastAPI", 
-    "SAML", 
-    "REST APIs", 
-    "GraphQL", 
+    "Django",
+    "FastAPI",
+    "SAML",
+    "REST APIs",
+    "GraphQL",
     "OIDC",
     "HTML",
     "CSS",
@@ -161,7 +161,7 @@ export const skills = {
     "Microsoft Teams",
     "SharePoint",
     "Git",
-    
+
 
 
 

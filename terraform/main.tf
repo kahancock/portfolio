@@ -44,11 +44,11 @@ resource "random_string" "bucket_suffix" {
 
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.website.id
-  
+
   index_document {
     suffix = "index.html"
   }
-  
+
   error_document {
     key = "404.html"
   }
@@ -119,7 +119,7 @@ resource "aws_cloudfront_distribution" "website" {
   is_ipv6_enabled     = true
   comment             = "${var.name} static website"
   default_root_object = "index.html"
-  
+
   aliases = [var.domain, var.fqdn]
 
   default_cache_behavior {
@@ -202,8 +202,8 @@ resource "aws_s3_bucket_policy" "cloudfront_access" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "AllowCloudFrontServicePrincipal"
-        Effect    = "Allow"
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
