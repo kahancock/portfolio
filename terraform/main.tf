@@ -16,7 +16,9 @@ terraform {
   }
 }
 
-provider "aws" { region = var.region }
+provider "aws" {
+  region = var.region
+}
 
 # Provider for us-east-1 (required for CloudFront certificates)
 provider "aws" {
@@ -24,7 +26,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
-data "aws_route53_zone" "this" { name = var.domain private_zone = false }
+data "aws_route53_zone" "this" {
+  name         = var.domain
+  private_zone = false
+}
 
 # S3 bucket for static website hosting
 resource "aws_s3_bucket" "website" {
