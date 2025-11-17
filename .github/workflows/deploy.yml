@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
-      s3BucketName: ${{ steps.tf-plan.outputs.s3_bucket }}
-      cloudfrontId: ${{ steps.tf-plan.outputs.cloudfront_id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,21 +57,12 @@ jobs:
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
 
-          # Get S3 bucket name and CloudFront distribution ID for deployment
-          S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
-          CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
-
-          echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
-          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
-
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
           else
             exit 0
-          fi
-
-      - name: Publish Terraform Plan
+          fi      - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
@@ -178,23 +167,42 @@ jobs:
           name: dist
           path: dist/
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Initialize Terraform
+        working-directory: ./terraform
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=portfolio/terraform.tfstate" \
+            -backend-config="region=${{ env.AWS_REGION }}" \
+            -backend-config="dynamodb_table=${{ secrets.TF_STATE_LOCK_TABLE }}"
+
       - name: Get infrastructure info
         id: infra
+        working-directory: ./terraform
         run: |
-          # Use outputs from terraform-apply if available, otherwise from terraform-plan
-          if [ "${{ needs.terraform-apply.result }}" == "success" ]; then
-            S3_BUCKET="${{ needs.terraform-apply.outputs.s3BucketName }}"
-            CLOUDFRONT_ID="${{ needs.terraform-apply.outputs.cloudfrontId }}"
-          else
-            S3_BUCKET="${{ needs.terraform-plan.outputs.s3BucketName }}"
-            CLOUDFRONT_ID="${{ needs.terraform-plan.outputs.cloudfrontId }}"
-          fi
+          # Get outputs from Terraform state
+          S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
+          CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
 
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
-          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
+          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT      - name: Sync files to S3
 
-      - name: Sync files to S3
-        run: |
           aws s3 sync dist/ s3://${{ steps.infra.outputs.s3_bucket }}/ \
             --delete \
             --cache-control "public, max-age=31536000" \
@@ -221,4 +229,4 @@ jobs:
           echo "🚀 Deployment completed successfully!"
           echo "📦 Files uploaded to S3: ${{ steps.infra.outputs.s3_bucket }}"
           echo "🌍 CloudFront distribution: ${{ steps.infra.outputs.cloudfront_id }}"
-          echo "🔗 Website: https://${{ secrets.FQDN }}"
+          echo "🔗 Website: https://${{ secrets.AWS_FQDN }}"
