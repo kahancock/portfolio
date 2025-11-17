@@ -203,8 +203,10 @@ jobs:
           CLOUDFRONT_ID=$(terraform output -raw cloudfront_distribution_id 2>/dev/null || echo "")
 
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
-          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT      - name: Sync files to S3
+          echo "cloudfront_id=$CLOUDFRONT_ID" >> $GITHUB_OUTPUT
 
+      - name: Sync files to S3
+        run: |
           aws s3 sync dist/ s3://${{ steps.infra.outputs.s3_bucket }}/ \
             --delete \
             --cache-control "public, max-age=31536000" \
