@@ -2,7 +2,11 @@ name: Deploy to AWS S3 + CloudFront
 
 on:
   push:
-    branches: [ aws ]
+    paths-ignore:
+      - 'terraform/azure/**'
+      - '*.md'
+      - '.gitignore'
+      - '.vscode/**'
   workflow_dispatch:
 
 env:
