@@ -22,6 +22,12 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     environment: azure
+    env:
+      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+      ARM_USE_AZUREAD: true
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     steps:
@@ -41,11 +47,6 @@ jobs:
 
       - name: Initialize Terraform
         working-directory: ./terraform/azure
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
         run: |
           terraform init \
             -backend-config="resource_group_name=${{ secrets.AZURE_TF_STATE_RG }}" \
@@ -60,11 +61,6 @@ jobs:
       - name: Terraform Plan
         working-directory: ./terraform/azure
         id: tf-plan
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
         run: |
           export exitcode=0
           terraform plan -detailed-exitcode -no-color -out tfplan \
@@ -119,6 +115,12 @@ jobs:
     environment:
       name: azure
       url: https://azure.kylehancock.com
+    env:
+      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+      ARM_USE_AZUREAD: true
     outputs:
       staticWebAppName: ${{ steps.tf-outputs.outputs.static_web_app_name }}
       staticWebAppUrl: ${{ steps.tf-outputs.outputs.static_web_app_url }}
@@ -139,12 +141,6 @@ jobs:
 
       - name: Initialize Terraform
         working-directory: ./terraform/azure
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-          ARM_USE_AZUREAD: true
         run: |
           terraform init \
             -backend-config="resource_group_name=${{ secrets.AZURE_TF_STATE_RG }}" \
@@ -160,21 +156,11 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ./terraform/azure
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
         run: terraform apply -auto-approve tfplan
 
       - name: Get Terraform Outputs
         working-directory: ./terraform/azure
         id: tf-outputs
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
         run: |
           STATIC_WEB_APP_NAME=$(terraform output -raw static_web_app_name)
           STATIC_WEB_APP_URL=$(terraform output -raw static_web_app_url)
@@ -188,6 +174,12 @@ jobs:
     needs: [terraform-plan, build-site, terraform-apply]
     if: always() && needs.build-site.result == 'success' && (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped')
     environment: azure
+    env:
+      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+      ARM_USE_AZUREAD: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -211,12 +203,6 @@ jobs:
 
       - name: Initialize Terraform
         working-directory: ./terraform/azure
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-          ARM_USE_AZUREAD: true
         run: |
           terraform init \
             -backend-config="resource_group_name=${{ secrets.AZURE_TF_STATE_RG }}" \
@@ -227,11 +213,6 @@ jobs:
       - name: Get infrastructure info
         id: infra
         working-directory: ./terraform/azure
-        env:
-          ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-          ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
         run: |
           # Get outputs from Terraform state
           STATIC_WEB_APP_NAME=$(terraform output -raw static_web_app_name 2>/dev/null || echo "")
