@@ -29,7 +29,8 @@ Alternative URLs:
 - **Animations**: Framer Motion
 - **Content**: MDX for case studies
 - **Icons**: Lucide React
-- **Deployment**: GitHub Pages with GitHub Actions
+- **Deployment**: AWS S3 + CloudFront with Terraform & GitHub Actions
+- **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
 
 ### Project Structure
 ```
@@ -88,12 +89,21 @@ All content is managed through `src/lib/data.ts`:
 
 ## 🚀 Deployment
 
-The site uses GitHub Actions for automatic deployment to GitHub Pages:
+The site uses AWS infrastructure with Terraform and GitHub Actions for automated deployment:
 
-1. **Push to `GH_Pages` branch** triggers deployment
-2. **Custom domain** configured via `public/CNAME`
-3. **HTTPS** managed automatically by GitHub Pages
-4. **DNS** configured with CNAME and A records
+### Infrastructure
+- **S3 Static Hosting**: Stores and serves the built Astro site
+- **CloudFront CDN**: Global content delivery with caching
+- **Route53 DNS**: Domain management and routing
+- **ACM Certificate**: Automatic SSL/TLS certificates
+- **Terraform**: Infrastructure as code with state locking
+
+### Deployment Process
+1. **Push to `GH_Pages` branch** triggers GitHub Actions workflow
+2. **Terraform Plan/Apply** provisions AWS infrastructure if needed
+3. **Astro Build** generates static site files
+4. **S3 Sync** uploads files with optimized cache headers
+5. **CloudFront Invalidation** ensures fresh content delivery
 
 
 ## 📝 License
@@ -112,7 +122,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [Framer Motion](https://www.framer.com/motion/) - Animations
 - [Lucide Icons](https://lucide.dev/) - Icon Library
-- [GitHub Pages](https://pages.github.com/) - Hosting
+- [AWS S3](https://aws.amazon.com/s3/) - Static Hosting
+- [AWS CloudFront](https://aws.amazon.com/cloudfront/) - CDN
+- [Terraform](https://www.terraform.io/) - Infrastructure as Code
 
 ---
 
