@@ -9,7 +9,7 @@ export default function ThemeToggle() {
     // Check stored preference or default to dark
     const storedTheme = typeof localStorage !== "undefined" ? localStorage.getItem("theme") : null;
     const isDark = document.documentElement.classList.contains("dark");
-    
+
     // If no stored preference and not dark, set to dark
     if (!storedTheme && !isDark) {
       document.documentElement.classList.add("dark");
