@@ -42,11 +42,11 @@ jobs:
             -backend-config="dynamodb_table=${{ secrets.TF_STATE_LOCK_TABLE }}"
 
       - name: Terraform format
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         run: terraform fmt -check
 
       - name: Terraform Plan
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         id: tf-plan
         run: |
           export exitcode=0
@@ -68,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: terraform/tfplan
+          path: terraform/aws/tfplan
 
   build-site:
     name: Build Astro Site
@@ -122,7 +122,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Initialize Terraform
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
@@ -134,14 +134,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-          path: terraform/
+          path: terraform/aws/
 
       - name: Terraform Apply
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         run: terraform apply -auto-approve tfplan
 
       - name: Get Terraform Outputs
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         id: tf-outputs
         run: |
           S3_BUCKET=$(terraform output -raw s3_bucket_name)
@@ -179,7 +179,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Initialize Terraform
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
@@ -189,7 +189,7 @@ jobs:
 
       - name: Get infrastructure info
         id: infra
-        working-directory: ./terraform
+        working-directory: ./terraform/aws
         run: |
           # Get outputs from Terraform state
           S3_BUCKET=$(terraform output -raw s3_bucket_name 2>/dev/null || echo "")
