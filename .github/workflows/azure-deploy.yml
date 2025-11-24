@@ -16,18 +16,17 @@ on:
 env:
   AZURE_REGION: eastus
   TERRAFORM_VERSION: 1.6.0
+  ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+  ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+  ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
+  ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+  ARM_USE_AZUREAD: true
 
 jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
     environment: azure
-    env:
-      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-      ARM_USE_AZUREAD: true
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     steps:
@@ -115,12 +114,6 @@ jobs:
     environment:
       name: azure
       url: https://azure.kylehancock.com
-    env:
-      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-      ARM_USE_AZUREAD: true
     outputs:
       staticWebAppName: ${{ steps.tf-outputs.outputs.static_web_app_name }}
       staticWebAppUrl: ${{ steps.tf-outputs.outputs.static_web_app_url }}
@@ -174,12 +167,6 @@ jobs:
     needs: [terraform-plan, build-site, terraform-apply]
     if: always() && needs.build-site.result == 'success' && (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped')
     environment: azure
-    env:
-      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-      ARM_USE_AZUREAD: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
