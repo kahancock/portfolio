@@ -17,5 +17,5 @@ variable "domain" {
 
 variable "fqdn" {
   type        = string
-  description = "Full domain name where site will be served, e.g., www.kylehancock.com"
+  description = "Full domain name where site will be served, e.g., aws.kylehancock.com"
 }

@@ -74,10 +74,9 @@ resource "aws_cloudfront_origin_access_control" "website" {
 
 # ACM Certificate (must be in us-east-1 for CloudFront)
 resource "aws_acm_certificate" "cert" {
-  provider                  = aws.us_east_1
-  domain_name               = var.domain
-  subject_alternative_names = [var.fqdn]
-  validation_method         = "DNS"
+  provider          = aws.us_east_1
+  domain_name       = var.fqdn
+  validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
