@@ -1,10 +1,15 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the 'GH_Pages' branch
   push:
-    branches: [ GH_Pages ]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+    paths-ignore:
+      - 'terraform/azure/**'
+      - '*.md'
+      - '.gitignore'
+      - '.vscode/**'
+      - '.github/workflows/aws-deploy.yml'
+      - '.github/workflows/azure-deploy.yml'
+      - '.github/workflows/gcp-deploy.yml'
   workflow_dispatch:
 
 # Allow this job to clone the repo and create a page deployment
