@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - 'terraform/azure/**'
+      - 'terraform/gcp/**'
       - '*.md'
       - '.gitignore'
       - '.vscode/**'
