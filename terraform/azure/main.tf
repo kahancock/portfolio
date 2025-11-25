@@ -46,6 +46,12 @@ resource "azurerm_static_web_app" "portfolio" {
   sku_tier            = "Free"
   sku_size            = "Free"
 
+  timeouts {
+    create = "15m"
+    update = "15m"
+    delete = "15m"
+  }
+
   tags = {
     Environment = "Production"
     Project     = "Portfolio"
