@@ -72,6 +72,105 @@ resource "aws_cloudfront_origin_access_control" "website" {
   signing_protocol                  = "sigv4"
 }
 
+# AWS WAF Web ACL for CloudFront
+resource "aws_wafv2_web_acl" "cloudfront" {
+  provider    = aws.us_east_1
+  name        = "${var.name}-cloudfront-waf"
+  description = "WAF for ${var.name} CloudFront distribution"
+  scope       = "CLOUDFRONT"
+
+  default_action {
+    allow {}
+  }
+
+  # AWS Managed Rule for Common Rule Set (OWASP Top 10)
+  rule {
+    name     = "AWSManagedRulesCommonRuleSet"
+    priority = 0
+
+    action {
+      block {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+
+        rule_action_override {
+          name = "SizeRestrictions_BODY"
+
+          action_to_use {
+            block {}
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "${var.name}-common-rule-set-metrics"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # AWS Managed Rule for Known Bad Inputs
+  rule {
+    name     = "AWSManagedRulesKnownBadInputsRuleSet"
+    priority = 1
+
+    action {
+      block {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesKnownBadInputsRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "${var.name}-known-bad-inputs-metrics"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # Rate limiting rule for static content
+  rule {
+    name     = "RateLimitRule"
+    priority = 2
+
+    action {
+      block {}
+    }
+
+    statement {
+      rate_based_statement {
+        limit              = 2000
+        aggregate_key_type = "IP"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "${var.name}-rate-limit-metrics"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "${var.name}-cloudfront-waf-metrics"
+    sampled_requests_enabled   = true
+  }
+
+  tags = {
+    Name = "${var.name}-cloudfront-waf"
+  }
+}
+
 # ACM Certificate (must be in us-east-1 for CloudFront)
 resource "aws_acm_certificate" "cert" {
   provider          = aws.us_east_1
@@ -175,6 +274,8 @@ resource "aws_cloudfront_distribution" "website" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  web_acl_arn = aws_wafv2_web_acl.cloudfront.arn
 
   custom_error_response {
     error_code         = 404

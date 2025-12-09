@@ -22,3 +22,13 @@ output "certificate_arn" {
   value       = aws_acm_certificate_validation.cert.certificate_arn
   description = "ACM certificate ARN"
 }
+
+output "waf_web_acl_arn" {
+  value       = aws_wafv2_web_acl.cloudfront.arn
+  description = "AWS WAF Web ACL ARN for CloudFront"
+}
+
+output "waf_web_acl_id" {
+  value       = aws_wafv2_web_acl.cloudfront.id
+  description = "AWS WAF Web ACL ID"
+}
