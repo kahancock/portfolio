@@ -275,8 +275,6 @@ resource "aws_cloudfront_distribution" "website" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
-  web_acl_arn = aws_wafv2_web_acl.cloudfront.arn
-
   custom_error_response {
     error_code         = 404
     response_code      = 404
@@ -292,6 +290,12 @@ resource "aws_cloudfront_distribution" "website" {
   tags = {
     Name = "${var.name}-cloudfront"
   }
+}
+
+# Associate WAF with CloudFront distribution
+resource "aws_cloudfront_distribution_web_acl_association" "website" {
+  distribution_id = aws_cloudfront_distribution.website.id
+  web_acl_arn     = aws_wafv2_web_acl.cloudfront.arn
 }
 
 # S3 bucket policy to allow CloudFront access
