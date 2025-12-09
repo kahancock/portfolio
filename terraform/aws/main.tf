@@ -292,10 +292,11 @@ resource "aws_cloudfront_distribution" "website" {
   }
 }
 
-# Associate WAF with CloudFront distribution
-resource "aws_cloudfront_distribution_web_acl_association" "website" {
-  distribution_id = aws_cloudfront_distribution.website.id
-  web_acl_arn     = aws_wafv2_web_acl.cloudfront.arn
+# Attach WAF to CloudFront
+resource "aws_wafv2_web_acl_association" "cloudfront" {
+  provider     = aws.us_east_1
+  resource_arn = aws_cloudfront_distribution.website.arn
+  web_acl_arn  = aws_wafv2_web_acl.cloudfront.arn
 }
 
 # S3 bucket policy to allow CloudFront access
