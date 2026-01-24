@@ -32,8 +32,3 @@ output "ssl_certificate_name" {
   description = "Name of the managed SSL certificate"
   value       = google_compute_managed_ssl_certificate.portfolio_cert.name
 }
-
-output "terraform_state_bucket" {
-  description = "Name of the Terraform state bucket"
-  value       = google_storage_bucket.terraform_state.name
-}

@@ -51,10 +51,11 @@ resource "google_storage_bucket_iam_member" "public_read" {
 
 # Cloud CDN backend bucket
 resource "google_compute_backend_bucket" "portfolio_backend" {
-  name             = "portfolio-backend-bucket"
-  bucket_name      = google_storage_bucket.portfolio_bucket.name
-  enable_cdn       = true
-  compression_mode = "AUTOMATIC"
+  name                 = "portfolio-backend-bucket"
+  bucket_name          = google_storage_bucket.portfolio_bucket.name
+  enable_cdn           = true
+  compression_mode     = "AUTOMATIC"
+  edge_security_policy = google_compute_security_policy.portfolio_policy.id
 
   cdn_policy {
     cache_mode       = "CACHE_ALL_STATIC"
@@ -177,24 +178,4 @@ resource "google_compute_managed_ssl_certificate" "portfolio_cert" {
   lifecycle {
     create_before_destroy = true
   }
-}
-
-# Cloud Storage bucket for Terraform state
-resource "google_storage_bucket" "terraform_state" {
-  name          = "${lower(var.gcp_project_id)}-terraform-state"
-  location      = var.gcp_region
-  force_destroy = false
-
-  uniform_bucket_level_access = true
-
-  versioning {
-    enabled = true
-  }
-}
-
-# Restrict state bucket access
-resource "google_storage_bucket_iam_member" "state_bucket_access" {
-  bucket = google_storage_bucket.terraform_state.name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${var.service_account_email}"
 }
