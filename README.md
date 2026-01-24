@@ -1,16 +1,30 @@
 # Kyle Hancock - Portfolio
 
-A modern, responsive portfolio website showcasing professional experience, technical skills, and certifications. Built with **Astro**, **React**, and **Tailwind CSS**, featuring elegant glassmorphism effects and smooth animations.
+I’m a Senior Technology Leader with over 20 years of experience across enterprise technology, software development, and cloud infrastructure. My background spans architecture, delivery, and operations, with a strong focus on building scalable, reliable systems across diverse environments.
+
+## How many ways can you deploy a simple web app?
+
+I work across many different technology stacks, and one constant I’ve learned is that there are countless ways to solve the same problem. This repository demonstrates a number of those approaches by showcasing multiple ways to host and deploy a simple portfolio site using different technologies and platforms.
+
+GitHub Actions is used to provide automated, and contextual deployments. Only the components affected by a change are redeployed—for example, updates to AWS infrastructure do not trigger Azure deployments, while changes to the core React application result in redeployments across all environments. This approach keeps deployments efficient, and predictable, while highlighting the flexibility of modern tooling.
 
 ## 🌐 Live Site
 
-👉 **[www.kylehancock.com](https://www.kylehancock.com)**
+👉 **[www.kylehancock.com](https://www.kylehancock.com)** (GitHub Pages)
 
 Alternative URLs:
 - [kylehancock.com](https://kylehancock.com) (redirects to www)
-- [kahancock.github.io/portfolio](https://kahancock.github.io/portfolio) (redirects to custom domain)
+- [kahancock.github.io/portfolio](https://kahancock.github.io/portfolio) (redirects to kylehancock.com)
+    - **Deployment**: GitHub Actions
+    - **Infrastructure**: GitHub Pages
+- [aws.kylehancock.com](https://aws.kylehancock.com) (Simple S3 + CloudFront)
+    - **Deployment**: Terraform & GitHub Actions
+    - **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
+- [azure.kylehancock.com](azure.kylehancock.com) (Simple Azure static web app)
+    - **Deployment**: Terraform & GitHub Actions
+    - **Infrastructure**: Azure Static web app w/custom domain
 
-## ✨ Features
+## ✨ UI Features
 
 - **🌙 Dark Mode Default** – Professional dark theme with light mode toggle
 - **📱 Fully Responsive** – Optimized for mobile, tablet, and desktop
@@ -29,28 +43,50 @@ Alternative URLs:
 - **Animations**: Framer Motion
 - **Content**: MDX for case studies
 - **Icons**: Lucide React
-- **Deployment**: AWS S3 + CloudFront with Terraform & GitHub Actions
-- **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
 
 ### Project Structure
 ```
-src/
-├── components/
-│   ├── ui/                 # Reusable UI components
-│   ├── HeroSection.tsx     # Landing section with profile
-│   ├── ExperienceSection.tsx # Professional experience
-│   ├── SkillsSection.tsx   # Technical skills
-│   ├── LicensesSection.tsx # Certifications & licenses
-│   ├── EducationSection.tsx # Academic background
-│   └── Footer.tsx          # Contact information
-├── layouts/
-│   └── Layout.astro        # Base layout with theme system
-├── pages/
-│   ├── index.astro         # Homepage
-├── lib/
-│   └── data.ts            # Content configuration
-└── styles/
-    └── global.css         # Global styles and theme
+portfolio/
+├── .github/
+│   └── workflows/
+│       ├── gh-deploy.yml           # GitHub Pages deployment
+│       ├── aws-deploy.yml          # AWS S3 + CloudFront deployment
+│       ├── azure-deploy.yml        # Azure Static Web App deployment
+│       └── gcp-deploy.yml          # Google Cloud deployment
+├── terraform/
+│   ├── aws/
+│   │   ├── main.tf                # AWS infrastructure
+│   │   ├── variables.tf           # AWS variables
+│   │   ├── outputs.tf             # AWS outputs
+│   │   ├── terraform.tfvars       # AWS values
+│   │   └── bootstrap/             # AWS initialization
+│   ├── azure/
+│   │   ├── main.tf                # Azure infrastructure
+│   │   ├── variables.tf           # Azure variables
+│   │   └── outputs.tf             # Azure outputs
+│   └── gcp/
+│       └── [GCP configuration]
+├── src/
+│   ├── components/
+│   │   ├── ui/                    # Reusable UI components
+│   │   ├── HeroSection.tsx        # Landing section with profile
+│   │   ├── ExperienceSection.tsx  # Professional experience
+│   │   ├── SkillsSection.tsx      # Technical skills
+│   │   ├── LicensesSection.tsx    # Certifications & licenses
+│   │   ├── EducationSection.tsx   # Academic background
+│   │   └── Footer.tsx             # Contact information
+│   ├── layouts/
+│   │   └── Layout.astro           # Base layout with theme system
+│   ├── pages/
+│   │   └── index.astro            # Homepage
+│   ├── lib/
+│   │   ├── data.ts                # Content configuration
+│   │   └── utils.ts               # Utility functions
+│   └── styles/
+│       └── global.css             # Global styles and theme
+├── astro.config.mjs               # Astro configuration
+├── package.json                   # Dependencies & scripts
+└── tsconfig.json                  # TypeScript configuration
 ```
 
 ## 🚀 Local Development
@@ -87,24 +123,12 @@ npm run preview
 
 All content is managed through `src/lib/data.ts`:
 
-## 🚀 Deployment
-
-The site uses AWS infrastructure with Terraform and GitHub Actions for automated deployment:
-
-### Infrastructure
-- **S3 Static Hosting**: Stores and serves the built Astro site
-- **CloudFront CDN**: Global content delivery with caching
-- **Route53 DNS**: Domain management and routing
-- **ACM Certificate**: Automatic SSL/TLS certificates
-- **Terraform**: Infrastructure as code with state locking
-
 ### Deployment Process
 1. **Push to `GH_Pages` branch** triggers GitHub Actions workflow
 2. **Terraform Plan/Apply** provisions AWS infrastructure if needed
 3. **Astro Build** generates static site files
 4. **S3 Sync** uploads files with optimized cache headers
 5. **CloudFront Invalidation** ensures fresh content delivery
-
 
 ## 📝 License
 
@@ -122,8 +146,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [Framer Motion](https://www.framer.com/motion/) - Animations
 - [Lucide Icons](https://lucide.dev/) - Icon Library
-- [AWS S3](https://aws.amazon.com/s3/) - Static Hosting
-- [AWS CloudFront](https://aws.amazon.com/cloudfront/) - CDN
+- [AWS](https://aws.amazon.com//) - Amazon Web Services
+- [Azure](https://azure.microsoft.com/) - Microsoft Azure
+- [GitHub Pages](https://pages.github.com/) - GitHub Pages
 - [Terraform](https://www.terraform.io/) - Infrastructure as Code
 
 ---
