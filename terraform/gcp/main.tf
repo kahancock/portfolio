@@ -172,7 +172,7 @@ resource "google_compute_managed_ssl_certificate" "portfolio_cert" {
   name = "portfolio-ssl-cert"
 
   managed {
-    domains = [var.domain, "*.${var.domain}"]
+    domains = [var.domain]
   }
 
   lifecycle {
