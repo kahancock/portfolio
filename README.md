@@ -17,12 +17,15 @@ Alternative URLs:
 - [kahancock.github.io/portfolio](https://kahancock.github.io/portfolio) (redirects to kylehancock.com)
     - **Deployment**: GitHub Actions
     - **Infrastructure**: GitHub Pages
-- [aws.kylehancock.com](https://aws.kylehancock.com) (Simple S3 + CloudFront)
+- [aws.kylehancock.com](https://aws.kylehancock.com) (S3 + CloudFront)
     - **Deployment**: Terraform & GitHub Actions
     - **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
-- [azure.kylehancock.com](azure.kylehancock.com) (Simple Azure static web app)
+- [azure.kylehancock.com](azure.kylehancock.com) (Azure static web app)
     - **Deployment**: Terraform & GitHub Actions
     - **Infrastructure**: Azure Static web app w/custom domain
+- [gcp.kylehancock.com](azure.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
+    - **Deployment**: Terraform & GitHub Actions
+    - **Infrastructure**: GCP Bucket w/Load balancer and Cloud Armor to enable SSL
 
 ## ✨ UI Features
 
@@ -65,7 +68,10 @@ portfolio/
 │   │   ├── variables.tf           # Azure variables
 │   │   └── outputs.tf             # Azure outputs
 │   └── gcp/
-│       └── [GCP configuration]
+│       ├── main.tf                # GCP infrastructure
+│       ├── variables.tf           # GCP variables
+│       ├── outputs.tf             # GCP outputs
+│       └── terraform.tfvars       # GCP values
 ├── src/
 │   ├── components/
 │   │   ├── ui/                    # Reusable UI components
@@ -157,7 +163,7 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Infrastructure**: Azure Static Web App with custom domain
 - **Live at**: [azure.kylehancock.com](https://azure.kylehancock.com)
 
-#### Google Cloud Deployment (`gcp-deploy.yml`) - WIP
+#### Google Cloud Deployment (`gcp-deploy.yml`) - offline for cost savings
 - **Trigger**: Changes to source code, GCP terraform, or workflows (ignores aws/\*, azure/\*, and *.md)
 - **Process**:
   1. Terraform Plan (validate infrastructure changes)
@@ -165,7 +171,7 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
   3. Terraform Apply (if infrastructure changes detected)
   4. Deploy to Google Cloud Storage
 - **Infrastructure**: Cloud Storage, Cloud CDN, Cloud Load Balancing
-- **Live at**: [gcp.kylehancock.com](https://gcp.kylehancock.com) (pending)
+- **When Deployed available at**: [gcp.kylehancock.com](https://gcp.kylehancock.com) (not deployed due to GCP base costs for services)
 
 ## 📝 License
 
