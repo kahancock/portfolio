@@ -21,6 +21,7 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+    environment: aws
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     steps:
@@ -81,6 +82,7 @@ jobs:
   build-site:
     name: Build Astro Site
     runs-on: ubuntu-latest
+    environment: aws
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -161,6 +163,7 @@ jobs:
   deploy-to-s3:
     name: Deploy to S3 & CloudFront
     runs-on: ubuntu-latest
+    environment: aws
     needs: [terraform-plan, build-site, terraform-apply]
     if: always() && needs.build-site.result == 'success' && (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped')
     steps:
