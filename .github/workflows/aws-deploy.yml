@@ -60,8 +60,8 @@ jobs:
         run: |
           export exitcode=0
           terraform plan -detailed-exitcode -no-color -out tfplan \
-            -var="domain=${{ secrets.DOMAIN }}" \
-            -var="fqdn=${{ secrets.AWS_FQDN }}" \
+            -var="domain=${{ vars.DOMAIN }}" \
+            -var="fqdn=${{ vars.AWS_FQDN }}" \
             || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
