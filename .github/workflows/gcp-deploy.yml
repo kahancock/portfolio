@@ -1,16 +1,17 @@
 name: Deploy to Google Cloud
 
 on:
-  push:
-    paths-ignore:
-      - 'terraform/aws/**'
-      - 'terraform/azure/**'
-      - '*.md'
-      - '.gitignore'
-      - '.vscode/**'
-      - '.github/workflows/gh-deploy.yml'
-      - '.github/workflows/aws-deploy.yml'
-      - '.github/workflows/azure-deploy.yml'
+  # Temporarily disabled - uncomment push trigger to re-enable
+  # push:
+  #   paths-ignore:
+  #     - 'terraform/aws/**'
+  #     - 'terraform/azure/**'
+  #     - '*.md'
+  #     - '.gitignore'
+  #     - '.vscode/**'
+  #     - '.github/workflows/gh-deploy.yml'
+  #     - '.github/workflows/aws-deploy.yml'
+  #     - '.github/workflows/azure-deploy.yml'
   workflow_dispatch:
 
 env:
