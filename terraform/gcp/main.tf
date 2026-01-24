@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "portfolio-terraform-state"
+    bucket = "gcp-kylehancock-com-terraform-state"
     prefix = "portfolio/gcp"
   }
 }
@@ -39,11 +39,6 @@ resource "google_storage_bucket" "portfolio_bucket" {
 
   versioning {
     enabled = true
-  }
-
-  tags = {
-    environment = "production"
-    project     = "portfolio"
   }
 }
 
@@ -83,11 +78,11 @@ resource "google_compute_security_policy" "portfolio_policy" {
   name = "portfolio-security-policy"
 
   # Allow all by default
-  rules {
+  rule {
     action   = "allow"
     priority = "65534"
     match {
-      versioned_expr = "EXPR_V1"
+      versioned_expr = "SRC_IPS_V1"
       expr {
         expression = "*"
       }
@@ -96,11 +91,11 @@ resource "google_compute_security_policy" "portfolio_policy" {
   }
 
   # Rate limiting rule
-  rules {
+  rule {
     action   = "rate_based_ban"
     priority = "1000"
     match {
-      versioned_expr = "EXPR_V1"
+      versioned_expr = "SRC_IPS_V1"
       expr {
         expression = "*"
       }
@@ -125,11 +120,6 @@ resource "google_compute_security_policy" "portfolio_policy" {
 resource "google_compute_url_map" "portfolio_lb" {
   name            = "portfolio-load-balancer"
   default_service = google_compute_backend_bucket.portfolio_backend.id
-
-  path_rule {
-    paths   = ["/*"]
-    service = google_compute_backend_bucket.portfolio_backend.id
-  }
 }
 
 # HTTPS Proxy
@@ -199,11 +189,6 @@ resource "google_storage_bucket" "terraform_state" {
 
   versioning {
     enabled = true
-  }
-
-  tags = {
-    environment = "production"
-    purpose     = "terraform-state"
   }
 }
 
