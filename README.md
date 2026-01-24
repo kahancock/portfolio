@@ -121,14 +121,51 @@ npm run preview
 
 ## ⚙️ Customization
 
-All content is managed through `src/lib/data.ts`:
+All content is managed through `src/lib/data.ts`.
 
-### Deployment Process
-1. **Push to `GH_Pages` branch** triggers GitHub Actions workflow
-2. **Terraform Plan/Apply** provisions AWS infrastructure if needed
-3. **Astro Build** generates static site files
-4. **S3 Sync** uploads files with optimized cache headers
-5. **CloudFront Invalidation** ensures fresh content delivery
+### Deployment Pipelines
+
+The repository uses **intelligent path-based triggering** to deploy only affected components:
+
+#### GitHub Pages Deployment (`gh-deploy.yml`)
+- **Trigger**: Changes to source code or workflows (ignores terraform/\* and *.md)
+- **Process**:
+  1. Checkout code
+  2. Install dependencies
+  3. Build Astro site
+  4. Deploy to GitHub Pages
+- **Live at**: [www.kylehancock.com](https://www.kylehancock.com)
+
+#### AWS Deployment (`aws-deploy.yml`)
+- **Trigger**: Changes to source code, AWS terraform, or workflows (ignores azure/\*, gcp/\*, and *.md)
+- **Process**:
+  1. Terraform Plan (validate infrastructure changes)
+  2. Build Astro site
+  3. Terraform Apply (if infrastructure changes detected)
+  4. Sync files to S3 with optimized cache headers
+  5. Create CloudFront invalidation
+- **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
+- **Live at**: [aws.kylehancock.com](https://aws.kylehancock.com)
+
+#### Azure Deployment (`azure-deploy.yml`)
+- **Trigger**: Changes to source code, Azure terraform, or workflows (ignores aws/\*, gcp/\*, and *.md)
+- **Process**:
+  1. Terraform Plan (validate infrastructure changes)
+  2. Build Astro site
+  3. Terraform Apply (if infrastructure changes detected)
+  4. Deploy to Azure Static Web App
+- **Infrastructure**: Azure Static Web App with custom domain
+- **Live at**: [azure.kylehancock.com](https://azure.kylehancock.com)
+
+#### Google Cloud Deployment (`gcp-deploy.yml`) - WIP
+- **Trigger**: Changes to source code, GCP terraform, or workflows (ignores aws/\*, azure/\*, and *.md)
+- **Process**:
+  1. Terraform Plan (validate infrastructure changes)
+  2. Build Astro site
+  3. Terraform Apply (if infrastructure changes detected)
+  4. Deploy to Google Cloud Storage
+- **Infrastructure**: Cloud Storage, Cloud CDN, Cloud Load Balancing
+- **Live at**: [gcp.kylehancock.com](https://gcp.kylehancock.com) (pending)
 
 ## 📝 License
 
