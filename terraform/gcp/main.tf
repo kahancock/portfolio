@@ -94,7 +94,7 @@ resource "google_compute_security_policy" "portfolio_policy" {
 
   # Rate limiting rule
   rule {
-    action   = "rate_based_ban"
+    action   = "throttle"
     priority = "1000"
     match {
       versioned_expr = "SRC_IPS_V1"
@@ -111,8 +111,6 @@ resource "google_compute_security_policy" "portfolio_policy" {
         count        = 100
         interval_sec = 60
       }
-
-      ban_duration_sec = 600
     }
     description = "Rate limiting policy"
   }
