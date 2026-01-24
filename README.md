@@ -23,7 +23,7 @@ Alternative URLs:
 - [azure.kylehancock.com](azure.kylehancock.com) (Azure static web app)
     - **Deployment**: Terraform & GitHub Actions
     - **Infrastructure**: Azure Static web app w/custom domain
-- [gcp.kylehancock.com](azure.kylehancock.com) (GCP Bucket + SSL Requirements)
+- [gcp.kylehancock.com](azure.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
     - **Deployment**: Terraform & GitHub Actions
     - **Infrastructure**: GCP Bucket w/Load balancer and Cloud Armor to enable SSL
 
