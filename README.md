@@ -68,7 +68,10 @@ portfolio/
 │   │   ├── variables.tf           # Azure variables
 │   │   └── outputs.tf             # Azure outputs
 │   └── gcp/
-│       └── [GCP configuration]
+│       ├── main.tf                # GCP infrastructure
+│       ├── variables.tf           # GCP variables
+│       ├── outputs.tf             # GCP outputs
+│       └── terraform.tfvars       # GCP values
 ├── src/
 │   ├── components/
 │   │   ├── ui/                    # Reusable UI components
