@@ -76,7 +76,7 @@ resource "google_compute_backend_bucket" "portfolio_backend" {
 
 # Cloud Armor edge security policy (required for backend buckets)
 resource "google_compute_security_policy" "portfolio_policy" {
-  name = "portfolio-security-policy"
+  name = "portfolio-edge-security-policy"
   type = "CLOUD_ARMOR_EDGE"
 
   # Allow all by default
