@@ -161,10 +161,6 @@ export const skills = {
     "Microsoft Teams",
     "SharePoint",
     "Git",
-
-
-
-
   ],
 };
 
@@ -218,5 +214,15 @@ export const licenses = [
     name: "Certified Education Technology Leader™ (CETL®)",
     issuer: "Consortium for School Networking (CoSN)",
     date: "February 2020",
+  },
+  {
+    name: "HashiCorp Certified: Terraform Associate",
+    issuer: "HashiCorp",
+    date: "December 2025",
+  },
+     {
+    name: "Microsoft Certified: Azure Administrator Associate",
+    issuer: "Microsoft",
+    date: "January 2026",
   },
 ];
