@@ -81,11 +81,11 @@ resource "google_compute_security_policy" "portfolio_policy" {
   # Allow all by default
   rule {
     action   = "allow"
-    priority = "65534"
+    priority = "2147483647"
     match {
       versioned_expr = "SRC_IPS_V1"
-      expr {
-        expression = "*"
+      config {
+        src_ip_ranges = ["*"]
       }
     }
     description = "Default allow rule"
@@ -97,8 +97,8 @@ resource "google_compute_security_policy" "portfolio_policy" {
     priority = "1000"
     match {
       versioned_expr = "SRC_IPS_V1"
-      expr {
-        expression = "*"
+      config {
+        src_ip_ranges = ["*"]
       }
     }
     rate_limit_options {
