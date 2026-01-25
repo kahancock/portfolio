@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     paths-ignore:
+      - 'docker/**'
       - 'terraform/aws/**'
       - 'terraform/azure/**'
       - 'terraform/gcp/**'

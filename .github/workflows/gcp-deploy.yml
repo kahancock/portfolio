@@ -4,6 +4,7 @@ on:
   # Temporarily disabled - uncomment push trigger to re-enable
   # push:
   #   paths-ignore:
+  #     - 'docker/**'
   #     - 'terraform/aws/**'
   #     - 'terraform/azure/**'
   #     - '*.md'

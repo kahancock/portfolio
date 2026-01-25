@@ -3,6 +3,7 @@ name: Deploy to AWS S3 + CloudFront
 on:
   push:
     paths-ignore:
+      - 'docker/**'
       - 'terraform/azure/**'
       - 'terraform/gcp/**'
       - '*.md'
