@@ -8,10 +8,18 @@ terraform {
   }
 
   backend "s3" {
-    # Most config provided via r2.tfbackend generated at init time
-    # These flags are only valid in the HCL block, not in .tfbackend files
-    skip_requesting_account_id = true
-    skip_s3_checksum           = true
+    bucket = "<YOUR_BUCKET_NAME>"
+    key    = "/some/key/terraform.tfstate"
+    region                      = "auto"
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_region_validation      = true
+    skip_requesting_account_id  = true
+    skip_s3_checksum            = true
+    use_path_style              = true
+    access_key = "<YOUR_R2_ACCESS_KEY>"
+    secret_key = "<YOUR_R2_ACCESS_SECRET>"
+    endpoints = { s3 = "https://<YOUR_ACCOUNT_ID>.r2.cloudflarestorage.com" }
   }
 }
 
