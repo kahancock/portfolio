@@ -12,6 +12,7 @@ terraform {
   # Required vars: CF_TF_STATE_BUCKET, CLOUDFLARE_ACCOUNT_ID
   # Required secrets: CF_R2_ACCESS_KEY_ID, CF_R2_SECRET_ACCESS_KEY
   backend "s3" {
+    region                      = "us-east-1"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     skip_region_validation      = true
