@@ -9,8 +9,8 @@ terraform {
 
   backend "s3" {
     # Uses Cloudflare R2 as S3-compatible backend
-    # Configuration is provided via backend-config parameters and
-    # environment variables in GitHub Actions
+    # bucket and key are provided via -backend-config in GitHub Actions
+    # R2 endpoint is provided via -backend-config="endpoints={s3=\"https://ACCOUNT_ID.r2.cloudflarestorage.com\"}"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     skip_region_validation      = true
