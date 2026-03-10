@@ -11,7 +11,9 @@ terraform {
   # See .github/workflows/cloudflare-deploy.yml for the full configuration.
   # Required vars: CF_TF_STATE_BUCKET, CLOUDFLARE_ACCOUNT_ID
   # Required secrets: CF_R2_ACCESS_KEY_ID, CF_R2_SECRET_ACCESS_KEY
-  backend "s3" {}
+  backend "s3" {
+    skip_requesting_account_id = true
+  }
 }
 
 provider "cloudflare" {
