@@ -7,20 +7,11 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "<YOUR_BUCKET_NAME>"
-    key    = "/some/key/terraform.tfstate"
-    region                      = "auto"
-    skip_credentials_validation = true
-    skip_metadata_api_check     = true
-    skip_region_validation      = true
-    skip_requesting_account_id  = true
-    skip_s3_checksum            = true
-    use_path_style              = true
-    access_key = "<YOUR_R2_ACCESS_KEY>"
-    secret_key = "<YOUR_R2_ACCESS_SECRET>"
-    endpoints = { s3 = "https://<YOUR_ACCOUNT_ID>.r2.cloudflarestorage.com" }
-  }
+  # Backend config is supplied at init time via -backend-config flag.
+  # See .github/workflows/cloudflare-deploy.yml for the full configuration.
+  # Required vars: CF_TF_STATE_BUCKET, CLOUDFLARE_ACCOUNT_ID
+  # Required secrets: CF_R2_ACCESS_KEY_ID, CF_R2_SECRET_ACCESS_KEY
+  backend "s3" {}
 }
 
 provider "cloudflare" {

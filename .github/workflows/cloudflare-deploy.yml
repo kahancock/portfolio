@@ -37,20 +37,26 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-          aws-secret-access-key: "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
-          aws-region: "auto"
-
       - name: Initialize Terraform
         working-directory: ./terraform/cloudflare
         run: |
-          terraform init \
-            -backend-config="bucket=${{ vars.CF_TF_STATE_BUCKET }}" \
-            -backend-config="key=portfolio/terraform.tfstate" \
-            -backend-config="region=auto" \
+          cat > r2.tfbackend <<EOF
+          bucket     = "${{ vars.CF_TF_STATE_BUCKET }}"
+          key        = "portfolio/terraform.tfstate"
+          region     = "us-east-1"
+          access_key = "${{ secrets.CF_R2_ACCESS_KEY_ID }}"
+          secret_key = "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
+
+          skip_credentials_validation = true
+          skip_metadata_api_check     = true
+          skip_region_validation      = true
+          use_path_style              = true
+
+          endpoints = {
+            s3 = "https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          }
+          EOF
+          terraform init -backend-config=r2.tfbackend
 
       - name: Terraform format
         working-directory: ./terraform/cloudflare
@@ -127,11 +133,33 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
+
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
           name: tfplan-cloudflare
           path: terraform/cloudflare/
+
+      - name: Initialize Terraform
+        working-directory: ./terraform/cloudflare
+        run: |
+          cat > r2.tfbackend <<EOF
+          bucket     = "${{ vars.CF_TF_STATE_BUCKET }}"
+          key        = "portfolio/terraform.tfstate"
+          region     = "us-east-1"
+          access_key = "${{ secrets.CF_R2_ACCESS_KEY_ID }}"
+          secret_key = "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
+
+          skip_credentials_validation = true
+          skip_metadata_api_check     = true
+          skip_region_validation      = true
+          use_path_style              = true
+
+          endpoints = {
+            s3 = "https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          }
+          EOF
+          terraform init -backend-config=r2.tfbackend
 
       - name: Terraform Apply
         working-directory: ./terraform/cloudflare
