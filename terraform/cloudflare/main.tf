@@ -8,7 +8,10 @@ terraform {
   }
 
   backend "s3" {
-    # All configuration provided via r2.tfbackend generated at init time
+    # Most config provided via r2.tfbackend generated at init time
+    # These flags are only valid in the HCL block, not in .tfbackend files
+    skip_requesting_account_id = true
+    skip_s3_checksum           = true
   }
 }
 
