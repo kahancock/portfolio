@@ -7,12 +7,16 @@ terraform {
     }
   }
 
-  # Backend config is supplied at init time via -backend-config flag.
+  # Credentials, bucket, key, and endpoint are injected at init time via -backend-config flag.
   # See .github/workflows/cloudflare-deploy.yml for the full configuration.
   # Required vars: CF_TF_STATE_BUCKET, CLOUDFLARE_ACCOUNT_ID
   # Required secrets: CF_R2_ACCESS_KEY_ID, CF_R2_SECRET_ACCESS_KEY
   backend "s3" {
-    skip_requesting_account_id = true
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_region_validation      = true
+    skip_requesting_account_id  = true
+    use_path_style              = true
   }
 }
 

@@ -47,11 +47,6 @@ jobs:
           access_key = "${{ secrets.CF_R2_ACCESS_KEY_ID }}"
           secret_key = "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
 
-          skip_credentials_validation = true
-          skip_metadata_api_check     = true
-          skip_region_validation      = true
-          use_path_style              = true
-
           endpoints = {
             s3 = "https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           }
@@ -150,11 +145,6 @@ jobs:
           access_key = "${{ secrets.CF_R2_ACCESS_KEY_ID }}"
           secret_key = "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
 
-          skip_credentials_validation = true
-          skip_metadata_api_check     = true
-          skip_region_validation      = true
-          use_path_style              = true
-
           endpoints = {
             s3 = "https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           }
@@ -208,11 +198,6 @@ jobs:
           region     = "us-east-1"
           access_key = "${{ secrets.CF_R2_ACCESS_KEY_ID }}"
           secret_key = "${{ secrets.CF_R2_SECRET_ACCESS_KEY }}"
-
-          skip_credentials_validation = true
-          skip_metadata_api_check     = true
-          skip_region_validation      = true
-          use_path_style              = true
 
           endpoints = {
             s3 = "https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com"
