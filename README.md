@@ -191,6 +191,17 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Infrastructure**: Cloud Storage, Cloud CDN, Cloud Load Balancing
 - **When Deployed available at**: [gcp.kylehancock.com](https://gcp.kylehancock.com) (not deployed due to GCP base costs for services)
 
+#### Cloudflare Deployment (`cloudflare-deploy.yml`)
+
+- **Trigger**: Changes to source code, Cloudflare terraform, or workflows (ignores aws/\*, azure/\*, gcp/\*, and \*.md)
+- **Process**:
+  1. Terraform Plan (validate infrastructure changes)
+  2. Build Astro site
+  3. Terraform Apply (if infrastructure changes detected)
+  4. Deploy to Cloudflare Pages
+- **Infrastructure**: Cloudflare Pages with custom domain
+- **Live at**: [cloudflare.kylehancock.com](https://cloudflare.kylehancock.com)
+
 ## 📝 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
