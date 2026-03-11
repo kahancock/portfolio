@@ -216,13 +216,15 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 **Technologies:**
 
 - [Astro](https://astro.build/) - Static Site Generator
+- [AWS](https://aws.amazon.com/) - Amazon Web Services
+- [Azure](https://azure.microsoft.com/) - Microsoft Azure
+- [Cloudflare](https://www.cloudflare.com/) - Cloudflare Pages
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+- [GCP](https://cloud.google.com/) - Google Cloud Platform
+- [GitHub Pages](https://pages.github.com/) - GitHub Pages
+- [Lucide Icons](https://lucide.dev/) - Icon Library
 - [React](https://reactjs.org/) - UI Library
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Framer Motion](https://www.framer.com/motion/) - Animations
-- [Lucide Icons](https://lucide.dev/) - Icon Library
-- [AWS](https://aws.amazon.com//) - Amazon Web Services
-- [Azure](https://azure.microsoft.com/) - Microsoft Azure
-- [GitHub Pages](https://pages.github.com/) - GitHub Pages
 - [Terraform](https://www.terraform.io/) - Infrastructure as Code
 
 ---
