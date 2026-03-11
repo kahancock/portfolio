@@ -95,32 +95,15 @@ CLOUDFLARE_API_TOKEN
 - Create an API token at Cloudflare Dashboard → My Profile → API Tokens
 - Required permissions: `Cloudflare Pages:Edit`
 
-#### R2 State Backend Credentials
-
-```
-CF_R2_ACCESS_KEY_ID
-CF_R2_SECRET_ACCESS_KEY
-```
-
-- Create R2 API tokens at Cloudflare Dashboard → R2 → Manage R2 API Tokens
-- Required for Terraform state storage in Cloudflare R2
-
 ### Required Variables (repository vars)
 
 ```
 CLOUDFLARE_ACCOUNT_ID    # Cloudflare Account ID (Dashboard → Overview → right sidebar)
-CF_TF_STATE_BUCKET       # R2 bucket name for Terraform state
 CF_CUSTOM_DOMAIN         # Custom domain, e.g., cloudflare.kylehancock.com
 ```
 
 ### Setup Order
 
 1. **API Token**: Create Cloudflare API token and add as `CLOUDFLARE_API_TOKEN` secret
-2. **R2 Bucket**: Create an R2 bucket for Terraform state, create R2 API token
-3. **R2 Secrets**: Add `CF_R2_ACCESS_KEY_ID` and `CF_R2_SECRET_ACCESS_KEY` secrets
-4. **Variables**: Add `CLOUDFLARE_ACCOUNT_ID`, `CF_TF_STATE_BUCKET`, and `CF_CUSTOM_DOMAIN`
-5. **DNS**: Create a CNAME record in your external DNS provider pointing `CF_CUSTOM_DOMAIN` to `portfolio.pages.dev`
-
-### Required Cloudflare API Token Permissions
-
-- Account → Cloudflare Pages → Edit
+2. **Variables**: Add `CLOUDFLARE_ACCOUNT_ID`, `CF_TF_STATE_BUCKET`, and `CF_CUSTOM_DOMAIN`
+3. **DNS**: Create a CNAME record in your external DNS provider pointing `CF_CUSTOM_DOMAIN` to pages URL.
