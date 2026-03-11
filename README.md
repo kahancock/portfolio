@@ -13,19 +13,23 @@ GitHub Actions is used to provide automated, and contextual deployments. Only th
 👉 **[www.kylehancock.com](https://www.kylehancock.com)** (GitHub Pages)
 
 Alternative URLs:
+
 - [kylehancock.com](https://kylehancock.com) (redirects to www)
 - [kahancock.github.io/portfolio](https://kahancock.github.io/portfolio) (redirects to kylehancock.com)
-    - **Deployment**: GitHub Actions
-    - **Infrastructure**: GitHub Pages
+  - **Deployment**: GitHub Actions
+  - **Infrastructure**: GitHub Pages
 - [aws.kylehancock.com](https://aws.kylehancock.com) (S3 + CloudFront)
-    - **Deployment**: Terraform & GitHub Actions
-    - **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
-- [azure.kylehancock.com](azure.kylehancock.com) (Azure static web app)
-    - **Deployment**: Terraform & GitHub Actions
-    - **Infrastructure**: Azure Static web app w/custom domain
-- [gcp.kylehancock.com](azure.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
-    - **Deployment**: Terraform & GitHub Actions
-    - **Infrastructure**: GCP Bucket w/Load balancer and Cloud Armor to enable SSL
+  - **Deployment**: Terraform & GitHub Actions
+  - **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
+- [azure.kylehancock.com](https://azure.kylehancock.com) (Azure static web app)
+  - **Deployment**: Terraform & GitHub Actions
+  - **Infrastructure**: Azure Static web app w/custom domain
+- [gcp.kylehancock.com](https://gcp.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
+  - **Deployment**: Terraform & GitHub Actions
+  - **Infrastructure**: GCP Bucket w/Load balancer and Cloud Armor to enable SSL
+- [cloudflare.kylehancock.com](https://cloudflare.kylehancock.com) (Cloudflare pages)
+  - **Deployment**: Terraform, GitHub Actions, & Terraform Cloud for state management
+  - **Infrastructure**: Cloudflare pages w/custom domain
 
 ## ✨ UI Features
 
@@ -40,6 +44,7 @@ Alternative URLs:
 ## 🏗️ Architecture
 
 ### Tech Stack
+
 - **Framework**: Astro 5.x (Static Site Generator)
 - **UI Library**: React 19
 - **Styling**: Tailwind CSS 4.x
@@ -48,6 +53,7 @@ Alternative URLs:
 - **Icons**: Lucide React
 
 ### Project Structure
+
 ```
 portfolio/
 ├── .github/
@@ -55,6 +61,7 @@ portfolio/
 │       ├── gh-deploy.yml           # GitHub Pages deployment
 │       ├── aws-deploy.yml          # AWS S3 + CloudFront deployment
 │       ├── azure-deploy.yml        # Azure Static Web App deployment
+│       ├── cloudflare-deploy.yml   # Cloudflare Pages deployment
 │       └── gcp-deploy.yml          # Google Cloud deployment
 ├── terraform/
 │   ├── aws/
@@ -67,6 +74,10 @@ portfolio/
 │   │   ├── main.tf                # Azure infrastructure
 │   │   ├── variables.tf           # Azure variables
 │   │   └── outputs.tf             # Azure outputs
+│   ├── cloudflare/
+│   │   ├── main.tf                # Cloudflare infrastructure
+│   │   ├── variables.tf           # Cloudflare variables
+│   │   └── outputs.tf             # Cloudflare outputs
 │   └── gcp/
 │       ├── main.tf                # GCP infrastructure
 │       ├── variables.tf           # GCP variables
@@ -98,10 +109,12 @@ portfolio/
 ## 🚀 Local Development
 
 ### Prerequisites
+
 - Node.js 20+
 - npm
 
 ### Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/kahancock/portfolio.git
@@ -117,6 +130,7 @@ npm run dev
 Visit `http://localhost:4321` to view the site.
 
 ### Build Commands
+
 ```bash
 # Build for production
 npm run build
@@ -134,7 +148,8 @@ All content is managed through `src/lib/data.ts`.
 The repository uses **intelligent path-based triggering** to deploy only affected components:
 
 #### GitHub Pages Deployment (`gh-deploy.yml`)
-- **Trigger**: Changes to source code or workflows (ignores terraform/\* and *.md)
+
+- **Trigger**: Changes to source code or workflows (ignores terraform/\* and \*.md)
 - **Process**:
   1. Checkout code
   2. Install dependencies
@@ -143,7 +158,8 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Live at**: [www.kylehancock.com](https://www.kylehancock.com)
 
 #### AWS Deployment (`aws-deploy.yml`)
-- **Trigger**: Changes to source code, AWS terraform, or workflows (ignores azure/\*, gcp/\*, and *.md)
+
+- **Trigger**: Changes to source code, AWS terraform, or workflows (ignores azure/\*, gcp/\*, and \*.md)
 - **Process**:
   1. Terraform Plan (validate infrastructure changes)
   2. Build Astro site
@@ -154,7 +170,8 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Live at**: [aws.kylehancock.com](https://aws.kylehancock.com)
 
 #### Azure Deployment (`azure-deploy.yml`)
-- **Trigger**: Changes to source code, Azure terraform, or workflows (ignores aws/\*, gcp/\*, and *.md)
+
+- **Trigger**: Changes to source code, Azure terraform, or workflows (ignores aws/\*, gcp/\*, and \*.md)
 - **Process**:
   1. Terraform Plan (validate infrastructure changes)
   2. Build Astro site
@@ -164,7 +181,8 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Live at**: [azure.kylehancock.com](https://azure.kylehancock.com)
 
 #### Google Cloud Deployment (`gcp-deploy.yml`) - offline for cost savings
-- **Trigger**: Changes to source code, GCP terraform, or workflows (ignores aws/\*, azure/\*, and *.md)
+
+- **Trigger**: Changes to source code, GCP terraform, or workflows (ignores aws/\*, azure/\*, and \*.md)
 - **Process**:
   1. Terraform Plan (validate infrastructure changes)
   2. Build Astro site
@@ -173,6 +191,17 @@ The repository uses **intelligent path-based triggering** to deploy only affecte
 - **Infrastructure**: Cloud Storage, Cloud CDN, Cloud Load Balancing
 - **When Deployed available at**: [gcp.kylehancock.com](https://gcp.kylehancock.com) (not deployed due to GCP base costs for services)
 
+#### Cloudflare Deployment (`cloudflare-deploy.yml`)
+
+- **Trigger**: Changes to source code, Cloudflare terraform, or workflows (ignores aws/\*, azure/\*, gcp/\*, and \*.md)
+- **Process**:
+  1. Terraform Plan (validate infrastructure changes)
+  2. Build Astro site
+  3. Terraform Apply (if infrastructure changes detected)
+  4. Deploy to Cloudflare Pages
+- **Infrastructure**: Cloudflare Pages with custom domain
+- **Live at**: [cloudflare.kylehancock.com](https://cloudflare.kylehancock.com)
+
 ## 📝 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -180,18 +209,23 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 🙏 Acknowledgments
 
 **Template Credits:**
+
 - Original portfolio template by **Rishikesh S** ([rishikesh2003](https://github.com/rishikesh2003))
 - Template repository: [my-portfolio](https://github.com/rishikesh2003/my-portfolio)
 
 **Technologies:**
+
 - [Astro](https://astro.build/) - Static Site Generator
-- [React](https://reactjs.org/) - UI Library  
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Framer Motion](https://www.framer.com/motion/) - Animations
-- [Lucide Icons](https://lucide.dev/) - Icon Library
-- [AWS](https://aws.amazon.com//) - Amazon Web Services
+- [AWS](https://aws.amazon.com/) - Amazon Web Services
 - [Azure](https://azure.microsoft.com/) - Microsoft Azure
+- [Cloudflare](https://www.cloudflare.com/) - Cloudflare Pages
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+- [GCP](https://cloud.google.com/) - Google Cloud Platform
+- [GitHub Actions](https://github.com/features/actions) - CI/CD
 - [GitHub Pages](https://pages.github.com/) - GitHub Pages
+- [Lucide Icons](https://lucide.dev/) - Icon Library
+- [React](https://reactjs.org/) - UI Library
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [Terraform](https://www.terraform.io/) - Infrastructure as Code
 
 ---
@@ -199,6 +233,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 📞 Contact
 
 **Kyle Hancock**
+
 - 🌐 Website: [www.kylehancock.com](https://www.kylehancock.com)
 - 📧 Email: [kyle@kylehancock.com](mailto:kyle@kylehancock.com)
 - 💼 LinkedIn: [kyle-a-hancock](https://www.linkedin.com/in/kyle-a-hancock/)
@@ -206,4 +241,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-*Built with ❤️ using modern web technologies*
+_Built with ❤️ using modern web technologies_
