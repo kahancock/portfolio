@@ -221,6 +221,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Cloudflare](https://www.cloudflare.com/) - Cloudflare Pages
 - [Framer Motion](https://www.framer.com/motion/) - Animations
 - [GCP](https://cloud.google.com/) - Google Cloud Platform
+- [GitHub Actions](https://github.com/features/actions) - CI/CD
 - [GitHub Pages](https://pages.github.com/) - GitHub Pages
 - [Lucide Icons](https://lucide.dev/) - Icon Library
 - [React](https://reactjs.org/) - UI Library
