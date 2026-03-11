@@ -21,13 +21,13 @@ Alternative URLs:
 - [aws.kylehancock.com](https://aws.kylehancock.com) (S3 + CloudFront)
   - **Deployment**: Terraform & GitHub Actions
   - **Infrastructure**: CloudFront CDN, S3 Static Hosting, Route53, ACM
-- [azure.kylehancock.com](azure.kylehancock.com) (Azure static web app)
+- [azure.kylehancock.com](https://azure.kylehancock.com) (Azure static web app)
   - **Deployment**: Terraform & GitHub Actions
   - **Infrastructure**: Azure Static web app w/custom domain
-- [gcp.kylehancock.com](gcp.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
+- [gcp.kylehancock.com](https://gcp.kylehancock.com) (GCP Bucket + SSL Requirements) - Offline for cost savings
   - **Deployment**: Terraform & GitHub Actions
   - **Infrastructure**: GCP Bucket w/Load balancer and Cloud Armor to enable SSL
-- [cloudflare.kylehancock.com](cloudflare.kylehancock.com) (Cloudflare pages)
+- [cloudflare.kylehancock.com](https://cloudflare.kylehancock.com) (Cloudflare pages)
   - **Deployment**: Terraform, GitHub Actions, & Terraform Cloud for state management
   - **Infrastructure**: Cloudflare pages w/custom domain
 
